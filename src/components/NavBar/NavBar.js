@@ -14,7 +14,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { withRouter } from 'react-router-dom';
@@ -134,13 +133,14 @@ class NavBar extends Component {
     };
 
     getTrainingAdviceColor(intelligentTrainer) {
+        console.log(intelligentTrainer.trainingAdvice);
         if (intelligentTrainer.trainingAdvice === 'start training') {
-            return '#1DE9B6';
+            return '#9500ae';
         } else if (intelligentTrainer.trainingAdvice === 'continue') {
-            return 'yellow';
+            return '#76ff03';
         }
 
-        return 'red';
+        return '#9500ae';
     }
 
     render() {
@@ -172,7 +172,7 @@ class NavBar extends Component {
                 open={isHistoryOpen}
                 onClose={this.handleHistoryMenuClose}
             >
-                <MenuItem onClick={() => { this.props.history.push(`/`) }}>
+                <MenuItem onClick={() => { this.props.history.push(`/exercises/history/data`) }}>
                         Historical information
                     <Badge className={classes.badge} badgeContent={historicalInformation.length} color="secondary">
                     </Badge>
@@ -212,7 +212,7 @@ class NavBar extends Component {
                                 </IconButton>
                             </Tooltip>
                             <Tooltip title={"Water advice"} placement="bottom">
-                                <IconButton>
+                                <IconButton style={{color: '#1c54b2'}}>
                                     <WhatshotIcon />
                                     <b>{intelligentTrainer.waterAdvice}</b>
                                 </IconButton>
@@ -224,7 +224,7 @@ class NavBar extends Component {
                                 </IconButton>
                             </Tooltip>
                             <Tooltip title={"Current sweat rate"} placement="bottom">
-                                <IconButton color="inherit">
+                                <IconButton style={{color: '#1c54b2'}}>
                                     <WhatshotIcon />
                                     {body.sweatRate}
                                 </IconButton>

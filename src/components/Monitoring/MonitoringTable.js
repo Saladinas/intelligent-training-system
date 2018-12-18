@@ -6,6 +6,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import MoodCircle from '@material-ui/icons/Mood';
 import Paper from '@material-ui/core/Paper';
 
 const styles = {
@@ -22,6 +23,9 @@ const styles = {
     },
     tableCell: {
         textAlign: 'center',
+    },
+    mood: {
+        color: '#76ff03',
     },
 };
 
@@ -49,7 +53,7 @@ class MonitoringTable extends Component {
     render() {
         const { value, classes, bodyConditions, normValuesByAge, userInfo, exercise } = this.props;
         const filteredBodyConditionsByExerciseType = this.filterBodyConditionsByExerciseType(exercise, bodyConditions);
-        const filteredBodyConditionsByDuration = filteredBodyConditionsByExerciseType.filter(x => x.duration <= Math.floor(value, 2))
+        const filteredBodyConditionsByDuration = filteredBodyConditionsByExerciseType.filter(x => x.duration <= Math.floor(value, 2)).reverse()
         return (
             <Paper className={classes.root}>
                 <Table className={classes.table}>
@@ -61,7 +65,7 @@ class MonitoringTable extends Component {
                             <CustomTableCell className={classes.tableCell}>Maximum heart rate</CustomTableCell>
                             <CustomTableCell className={classes.tableCell}>Heart rate status</CustomTableCell>
                             <CustomTableCell className={classes.tableCell}>Sweat rate</CustomTableCell>
-                            <CustomTableCell className={classes.tableCell}>Sweating (l)</CustomTableCell>
+                            <CustomTableCell className={classes.tableCell}>Sweating (liters/hour)</CustomTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -72,9 +76,9 @@ class MonitoringTable extends Component {
                                     <CustomTableCell className={classes.tableCell}>{condition.heartRate}</CustomTableCell>
                                     <CustomTableCell className={classes.tableCell}>[{normValuesByAge.normLowest}-{normValuesByAge.normHighest}]</CustomTableCell>
                                     <CustomTableCell className={classes.tableCell}>{normValuesByAge.maximum}</CustomTableCell>
-                                    <CustomTableCell className={classes.tableCell}>STATUS</CustomTableCell>
+                                    <CustomTableCell className={classes.tableCell}><MoodCircle className={classes.mood}/></CustomTableCell>
                                     <CustomTableCell className={classes.tableCell}>{condition.sweatRate}</CustomTableCell>
-                                    <CustomTableCell className={classes.tableCell}>{condition.sweatRate * parseInt(userInfo.height)}</CustomTableCell>
+                                    <CustomTableCell className={classes.tableCell}>{condition.sweatRate * parseInt(userInfo.height) / 100}</CustomTableCell>
                                 </TableRow>
                             );
                         })}

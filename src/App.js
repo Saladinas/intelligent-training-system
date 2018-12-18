@@ -4,16 +4,17 @@ import ExerciseList from './components/Exercises/ExerciseList';
 import Exercise from './components/Exercises/Exercise';
 import NavBar from './components/NavBar/NavBar';
 import Form from './components/Form/Form';
-import normValues from './data/normValues';
+import HistoricalData from './components/HistoricalData/HistoricalData';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import normsModel from './data/normsModel';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       body: {
-        heartRate: 100,
-        sweatRate: 100,
+        heartRate: 120,
+        sweatRate: 0.4,
         condition: 'regular',
         waterLevel: 'regular',
       },
@@ -45,7 +46,7 @@ class App extends Component {
 
   getNormValuesByUserAge() {
     const { userInfo } = this.state;
-    const normValuesByAge = normValues.filter(n => n.age === userInfo.age)[0];
+    const normValuesByAge = normsModel.filter(n => n.age === userInfo.age)[0];
 
     return normValuesByAge;
   }
@@ -60,6 +61,15 @@ class App extends Component {
     }))
   };
 
+  onUpdateIntelligentTrainer = (type, advice) => {
+    this.setState(prevState => ({
+      intelligentTrainer: {
+        ...prevState.intelligentTrainer,
+        [type]: advice,
+      }
+    }))
+  };
+
   render() {
     const { body, userInfo, intelligentTrainer } = this.state;
     const normValuesByAge = this.getNormValuesByUserAge();
@@ -69,7 +79,8 @@ class App extends Component {
           <Route path="/exercises" component={() => <NavBar intelligentTrainer={intelligentTrainer} body={body} />} />
           <Route exact path="/" render={() => <Form userInfo={userInfo} handleChange={(prop, event) => this.onChangeUserInfo(prop, event)} />} />
           <Route exact path="/exercises" component={() => <ExerciseList />} />
-          <Route exact path="/exercises/:exrcise" render={() => <Exercise userInfo={userInfo} normValuesByAge={normValuesByAge} onChangeBodyCondition={(values) => this.onChangeBodyCondition(values)} />} />
+          <Route exact path="/exercises/:exrcise" render={() => <Exercise updateIntelligentTrainer={this.onUpdateIntelligentTrainer} userInfo={userInfo} normValuesByAge={normValuesByAge} onChangeBodyCondition={(values) => this.onChangeBodyCondition(values)} />} />
+          <Route exact path="/exercises/history/data" render={() => <HistoricalData userInfo={userInfo} normValuesByAge={normValuesByAge} />} />
         </div>
       </Router>
     );

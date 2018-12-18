@@ -47,7 +47,6 @@ class Exercise extends Component {
             return currentBodyCondition;
         }
         if (exerciseType === 'Cardio') {
-            console.log(bodyConditions.cardio.filter(s => s.duration === exerciseSecond)[0]);
             const currentBodyCondition = bodyConditions.cardio.filter(s => s.duration === exerciseSecond)[0];
             return currentBodyCondition;
         }
@@ -77,6 +76,8 @@ class Exercise extends Component {
         const currentSliderValue = sliderValue + 1;
         const currentExerciseSecond = exerciseInformation.type === 'Strength' ? currentSliderValue : currentSliderValue * 3;
         if (Math.floor(currentSliderValue, 2) === MAX) {
+            this.props.updateIntelligentTrainer('trainingAdvice', 'Dead lift');
+            this.props.updateIntelligentTrainer('waterAdvice', 'Drink some water');
             clearInterval(interval);
             interval = null;
             this.setState(({
@@ -85,6 +86,7 @@ class Exercise extends Component {
                 active: false,
             }), () => this.monitor(currentExerciseSecond))
         } else {
+            this.props.updateIntelligentTrainer('trainingAdvice', 'continue');
             this.setState(({
                 sliderValue: currentSliderValue,
                 exerciseSecond: currentExerciseSecond,
@@ -96,9 +98,10 @@ class Exercise extends Component {
     updatesSlider = (event, currentSliderValue) => {
         const exerciseInformation = this.props.location.state.data;
         const currentExerciseSecond = exerciseInformation.type === 'Strength' ? currentSliderValue : currentSliderValue * 3;
+        this.props.updateIntelligentTrainer('trainingAdvice', 'continue');
         this.setState(({
             sliderValue: Math.floor(currentSliderValue, 2),
-            exerciseSecond: currentExerciseSecond,
+            exerciseSecond: Math.floor(currentExerciseSecond, 2),
         }), () => this.monitor(currentSliderValue));
     };
 
