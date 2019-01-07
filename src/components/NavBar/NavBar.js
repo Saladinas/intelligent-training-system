@@ -133,7 +133,6 @@ class NavBar extends Component {
     };
 
     getTrainingAdviceColor(intelligentTrainer) {
-        console.log(intelligentTrainer.trainingAdvice);
         if (intelligentTrainer.trainingAdvice === 'start training') {
             return '#9500ae';
         } else if (intelligentTrainer.trainingAdvice === 'continue') {

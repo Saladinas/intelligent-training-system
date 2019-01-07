@@ -51,7 +51,7 @@ class MonitoringTable extends Component {
     }
 
     render() {
-        const { value, classes, bodyConditions, normValuesByAge, userInfo, exercise } = this.props;
+        const { value, classes, bodyConditions, normValues, userInfo, exercise } = this.props;
         const filteredBodyConditionsByExerciseType = this.filterBodyConditionsByExerciseType(exercise, bodyConditions);
         const filteredBodyConditionsByDuration = filteredBodyConditionsByExerciseType.filter(x => x.duration <= Math.floor(value, 2)).reverse()
         return (
@@ -74,8 +74,8 @@ class MonitoringTable extends Component {
                                 <TableRow className={classes.row} key={condition.duration}>
                                     <CustomTableCell className={classes.tableCell}>{condition.duration}</CustomTableCell>
                                     <CustomTableCell className={classes.tableCell}>{condition.heartRate}</CustomTableCell>
-                                    <CustomTableCell className={classes.tableCell}>[{normValuesByAge.normLowest}-{normValuesByAge.normHighest}]</CustomTableCell>
-                                    <CustomTableCell className={classes.tableCell}>{normValuesByAge.maximum}</CustomTableCell>
+                                    <CustomTableCell className={classes.tableCell}>[{normValues.normLowest}-{normValues.normHighest}]</CustomTableCell>
+                                    <CustomTableCell className={classes.tableCell}>{normValues.maximum}</CustomTableCell>
                                     <CustomTableCell className={classes.tableCell}><MoodCircle className={classes.mood}/></CustomTableCell>
                                     <CustomTableCell className={classes.tableCell}>{condition.sweatRate}</CustomTableCell>
                                     <CustomTableCell className={classes.tableCell}>{condition.sweatRate * parseInt(userInfo.height) / 100}</CustomTableCell>

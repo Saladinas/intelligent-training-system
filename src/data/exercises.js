@@ -1,3 +1,4 @@
+// Same structure as 'Exercise' class in class diagram
 export default [
     {
         id: 0,

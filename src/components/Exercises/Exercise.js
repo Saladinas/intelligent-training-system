@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import bodyConditions from '../../data/bodyConditions';
-import config from '../../data/config';
 import { withRouter } from 'react-router-dom';
 
 const styles = theme => ({
@@ -41,35 +40,6 @@ class Exercise extends Component {
         };
     }
 
-    receive = (exerciseSecond, exerciseType) => {
-        if (exerciseType === 'Strength') {
-            const currentBodyCondition = bodyConditions.strength.filter(s => s.duration === exerciseSecond)[0];
-            return currentBodyCondition;
-        }
-        if (exerciseType === 'Cardio') {
-            const currentBodyCondition = bodyConditions.cardio.filter(s => s.duration === exerciseSecond)[0];
-            return currentBodyCondition;
-        }
-    }
-
-    monitor(exerciseSecond) {
-        const exerciseInformation = this.props.location.state.data;
-        if (exerciseInformation.type === 'Strength') {
-            // Monitor Strength type exercises every 10 seconds
-            if (exerciseSecond % config.monitoringTimes.strength === 0) {
-                const currentBodyCondition = this.receive(exerciseSecond, exerciseInformation.type);
-                this.props.onChangeBodyCondition(currentBodyCondition);
-            }
-        }
-        if (exerciseInformation.type === 'Cardio') {
-            // Monitor Strength type exercises every 30 seconds
-            if (exerciseSecond % config.monitoringTimes.cardio === 0) {
-                const currentBodyCondition = this.receive(exerciseSecond, exerciseInformation.type);
-                this.props.onChangeBodyCondition(currentBodyCondition);
-            }
-        }
-    }
-
     start = () => {
         const { sliderValue } = this.state;
         const exerciseInformation = this.props.location.state.data;
@@ -84,25 +54,23 @@ class Exercise extends Component {
                 sliderValue: currentSliderValue,
                 exerciseSecond: currentExerciseSecond,
                 active: false,
-            }), () => this.monitor(currentExerciseSecond))
+            }))
         } else {
-            this.props.updateIntelligentTrainer('trainingAdvice', 'continue');
             this.setState(({
                 sliderValue: currentSliderValue,
                 exerciseSecond: currentExerciseSecond,
                 active: true,
-            }), () => this.monitor(currentExerciseSecond));
+            }), () => this.props.monitor(currentExerciseSecond, exerciseInformation));
         }
     }
 
     updatesSlider = (event, currentSliderValue) => {
         const exerciseInformation = this.props.location.state.data;
         const currentExerciseSecond = exerciseInformation.type === 'Strength' ? currentSliderValue : currentSliderValue * 3;
-        this.props.updateIntelligentTrainer('trainingAdvice', 'continue');
         this.setState(({
             sliderValue: Math.floor(currentSliderValue, 2),
             exerciseSecond: Math.floor(currentExerciseSecond, 2),
-        }), () => this.monitor(currentSliderValue));
+        }), () => this.props.monitor(currentSliderValue, exerciseInformation));
     };
 
     changeMode = () => {
@@ -124,7 +92,7 @@ class Exercise extends Component {
     }
 
     render() {
-        const { classes, normValuesByAge, userInfo } = this.props;
+        const { classes, normValues, userInfo } = this.props;
         const { active, exerciseSecond, sliderValue } = this.state;
         const exerciseInformation = this.props.location.state.data;
         return (
@@ -139,7 +107,7 @@ class Exercise extends Component {
                     {active ? <PauseCircleFilledIcon className={classes.rightIcon} /> : <PlayCircleFilledIcon className={classes.rightIcon} />}
                 </Button>
                 <ExerciseSlider onDragStart={this.onDragStart} onChange={this.updatesSlider} valueToDisplay={exerciseSecond} value={sliderValue} active={active} />
-                <MonitoringTable exercise={exerciseInformation} userInfo={userInfo} normValuesByAge={normValuesByAge} bodyConditions={bodyConditions} value={exerciseSecond} />
+                <MonitoringTable exercise={exerciseInformation} userInfo={userInfo} normValues={normValues} bodyConditions={bodyConditions} value={exerciseSecond} />
             </div>
         );
     }

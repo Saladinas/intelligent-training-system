@@ -1,3 +1,4 @@
+// Same structure as 'Norms model' class in class diagram
 export default [
     {
         age: 20,

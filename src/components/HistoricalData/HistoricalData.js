@@ -7,7 +7,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import MoodCircle from '@material-ui/icons/Mood';
-import Paper from '@material-ui/core/Paper';
 import historicalInformation from '../../data/historicalInformation';
 import { withRouter } from 'react-router-dom';
 
@@ -52,8 +51,7 @@ const CustomTableCell = withStyles(theme => ({
 class HistoricalData extends Component {
 
     render() {
-        const { classes, normValuesByAge, userInfo } = this.props;
-        console.log(historicalInformation);
+        const { classes, normValues, userInfo } = this.props;
         return (
             <div className={classes.root}>
                 {historicalInformation.map(historical => {
@@ -78,8 +76,8 @@ class HistoricalData extends Component {
                                         <TableRow className={classes.row} key={value.duration}>
                                             <CustomTableCell className={classes.tableCell}>{value.duration}</CustomTableCell>
                                             <CustomTableCell className={classes.tableCell}>{value.heartRate}</CustomTableCell>
-                                            <CustomTableCell className={classes.tableCell}>[{normValuesByAge.normLowest}-{normValuesByAge.normHighest}]</CustomTableCell>
-                                            <CustomTableCell className={classes.tableCell}>{normValuesByAge.maximum}</CustomTableCell>
+                                            <CustomTableCell className={classes.tableCell}>[{normValues.normLowest}-{normValues.normHighest}]</CustomTableCell>
+                                            <CustomTableCell className={classes.tableCell}>{normValues.maximum}</CustomTableCell>
                                             <CustomTableCell className={classes.tableCell}><MoodCircle className={classes.mood} /></CustomTableCell>
                                             <CustomTableCell className={classes.tableCell}>{value.sweatRate}</CustomTableCell>
                                             <CustomTableCell className={classes.tableCell}>{value.sweatRate * parseInt(userInfo.height) / 100}</CustomTableCell>
